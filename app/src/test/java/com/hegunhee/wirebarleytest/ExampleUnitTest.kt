@@ -14,4 +14,10 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+
+    @Test
+    fun `test api key`(){
+        println(BuildConfig.API_KEY)
+        assert(true)
+    }
 }
