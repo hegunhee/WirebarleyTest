@@ -1,70 +1,119 @@
 package com.hegunhee.wirebarleytest.ui
 
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hegunhee.wirebarleytest.data.Quotes
 import com.hegunhee.wirebarleytest.model.Repository
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-class MainViewModel(private val repository : Repository): ViewModel() {
+class MainViewModel(private val repository: Repository) : ViewModel() {
 
-    private var _country = MutableLiveData<Country>(Country.Korea)
-    val country : LiveData<Country>
-    get() = _country
+    var country: Country = Country.Korea
 
-    private var _countryText = MutableLiveData<String>("한국")
-    val countryText : LiveData<String>
-    get() = _countryText
+    private var _countryText = MutableLiveData<String>("")
+    val countryText: LiveData<String>
+        get() = _countryText
 
-    private var _currentRate = MutableLiveData<Double>()
-    val currentRate : LiveData<Double>
-    get() = _currentRate
+    private var _rateText = MutableLiveData<String>("")
+    val rateText: LiveData<String>
+        get() = _rateText
 
-    private var _usdValue = MutableLiveData<Int>(0)
-    val usdValue : LiveData<Int>
-    get() = _usdValue
+    private var _time = MutableLiveData<String>("00")
+    val time: LiveData<String>
+        get() = _time
 
-    var dollers : Int = 0
+    private var _changedMoney = MutableLiveData<String>("수취 금액은 00원 입니다.")
+    val changedMoney: LiveData<String>
+        get() = _changedMoney
+
+    val switch = MutableLiveData<Switch>(Switch.Uninitalized)
+
+    var countryKoreaName = "한국"
+    var countryEnglishName = "KRW"
+
+    var currentRate: Double = 0.0
+    var dollers: Int = 0
+
+    lateinit var storedQuotes: Quotes
 
     private var _totalValueVisible = MutableLiveData<Boolean>(false)
-    val totalValueVisible : LiveData<Boolean>
-    get() = _totalValueVisible
+    val totalValueVisible: LiveData<Boolean>
+        get() = _totalValueVisible
+
     fun initData() {
+        changeData()
+    }
+
+
+    fun onClickSendCountry() = viewModelScope.launch {
+        switch.postValue(Switch.Clicked)
+    }
+
+    fun changeData() {
         viewModelScope.launch {
-            Log.d("body", repository.getResponse().body().toString())
+            repository.getResponse().body()?.run {
+                if (success) {
+                    storedQuotes = quotes
+                    currentRate = country.toRate(quotes)
+                } else {
+                    currentRate = country.toRate(storedQuotes)
+                }
+            }
+            countryKoreaName = country.toKorea()
+            countryEnglishName = country.toEnglish()
+            _countryText.value = "$countryKoreaName ($countryEnglishName)"
+            _rateText.value = "${currentRate.changeFormat()} $countryEnglishName / USD"
+            _time.value = getCurrentTime()
+            setSendingMoney()
         }
-
-
     }
 
-    private fun isPossibleRange(text : Int) : Boolean {
-        return if(text <= 0 || text.toString().isEmpty()){
-            Log.d("possible","text <= 0 or length >=5 false")
+    fun getCurrentTime(): String {
+        val current = LocalDateTime.now().plusHours(9)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        return current.format(formatter)
+    }
+
+    private fun isPossibleRange(text: Int): Boolean {
+        return if (text <= 0 || text.toString().isEmpty()) {
             false
-        }else if(text <= 10000){
-            Log.d("possible","true possible")
+        } else if (text <= 10000) {
             true
-        }else{
-            Log.d("possible","text > 10000 or length >=5 false")
+        } else {
             false
         }
     }
-    fun onTextChanged(s : CharSequence, start : Int,before : Int, count : Int){
-        if(s.isEmpty()){
-            if(totalValueVisible.value == true) _totalValueVisible.value = false
-        }else{
-            if(isPossibleRange(s.toString().toInt())){
-                if(totalValueVisible.value == false) _totalValueVisible.value = true
+
+    fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        if (s.length >= 7) {
+            return
+        }
+        if (s.isEmpty()) {
+            if (totalValueVisible.value == true) _totalValueVisible.value = false
+        } else {
+            if (isPossibleRange(s.toString().toInt())) {
+                if (totalValueVisible.value == false) _totalValueVisible.value = true
                 dollers = s.toString().toInt()
-                Log.d("possible",dollers.toString())
-            }else{
-                if(totalValueVisible.value == true) _totalValueVisible.value = false
+                setSendingMoney()
+            } else {
+                if (totalValueVisible.value == true) _totalValueVisible.value = false
             }
         }
     }
 
+    private fun setSendingMoney() {
+        _changedMoney.value = "수취 금액은 ${(currentRate * dollers).changeFormat()} $countryEnglishName 입니다."
+    }
+
+    private fun Double.changeFormat(): String {
+        DecimalFormat("#,###.00").run {
+            return format(this@changeFormat)
+        }
+    }
 }
