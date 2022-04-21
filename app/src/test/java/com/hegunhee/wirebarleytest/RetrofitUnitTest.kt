@@ -16,7 +16,7 @@ class RetrofitUnitTest {
             val api = getRateApi()
             println("진입 그다음")
             api.getUSDRate(BuildConfig.API_KEY).awaitResponse().body()?.run {
-                println(quotes)
+                println(this)
             }
         }.join()
 
