@@ -1,0 +1,2 @@
+rootProject.name = "WirebarleyTest"
+include ':app'
