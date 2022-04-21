@@ -5,5 +5,5 @@ import retrofit2.Response
 
 interface Repository {
 
-    suspend fun getResponseBody() : Response<USDRate>
+    suspend fun getResponse() : Response<USDRate>
 }

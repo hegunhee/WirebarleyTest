@@ -7,7 +7,7 @@ import retrofit2.Response
 import retrofit2.awaitResponse
 
 class TestRepository(private val rateApi : RateAPI) : Repository {
-    override suspend fun getResponseBody(): Response<USDRate> {
+    override suspend fun getResponse(): Response<USDRate> {
         return rateApi.getUSDRate(BuildConfig.API_KEY).awaitResponse()
     }
 

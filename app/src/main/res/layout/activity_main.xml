@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="viewmodel"
@@ -16,17 +15,218 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.MainActivity">
+        android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="50dp"
+            android:text="환율 계산"
+            android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/fromCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:text="송금국가"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+
+        <TextView
+            android:id="@+id/fromCountrySemicolon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text=":"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@id/fromCountry"
+            app:layout_constraintTop_toTopOf="@id/fromCountry" />
+
+        <TextView
+            android:id="@+id/fromCountryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="미국 (USD)"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@id/fromCountrySemicolon"
+            app:layout_constraintTop_toTopOf="@id/fromCountry" />
+
+        <TextView
+            android:id="@+id/toCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="수취국가"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toStartOf="@id/toCountrySemicolon"
+            app:layout_constraintTop_toTopOf="@id/toCountrySemicolon" />
+
+
+        <TextView
+            android:id="@+id/toCountrySemicolon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text=":"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@id/fromCountrySemicolon"
+            app:layout_constraintTop_toBottomOf="@id/fromCountrySemicolon" />
+
+        <TextView
+            android:id="@+id/toCountryName"
+            android:layout_width="100dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="10dp"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@id/fromCountrySemicolon"
+            app:layout_constraintTop_toTopOf="@id/toCountrySemicolon"
+            tools:text="한국 (KRW)" />
+
+        <TextView
+            android:id="@+id/rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="환율"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toStartOf="@id/rateSemicolon"
+            app:layout_constraintTop_toTopOf="@id/rateSemicolon" />
+
+
+        <TextView
+            android:id="@+id/rateSemicolon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text=":"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@id/toCountrySemicolon"
+            app:layout_constraintTop_toBottomOf="@id/toCountrySemicolon" />
+
+        <TextView
+            android:id="@+id/ratePercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@id/rateSemicolon"
+            app:layout_constraintTop_toTopOf="@id/rateSemicolon"
+            tools:text="1,130.05 KRW / USD" />
+
+        <TextView
+            android:id="@+id/checkTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="조회시간"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toStartOf="@id/checkSemicolon"
+            app:layout_constraintTop_toTopOf="@id/checkSemicolon" />
+
+
+        <TextView
+            android:id="@+id/checkSemicolon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text=":"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@id/rateSemicolon"
+            app:layout_constraintTop_toBottomOf="@id/rateSemicolon" />
+
+        <TextView
+            android:id="@+id/checkTimeStamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@id/checkSemicolon"
+            app:layout_constraintTop_toTopOf="@id/checkSemicolon"
+            tools:text="2022-04-21 15:19" />
+
+        <TextView
+            android:id="@+id/send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="송금액"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toStartOf="@id/sendSemicolon"
+            app:layout_constraintTop_toTopOf="@id/sendSemicolon" />
+
+
+        <TextView
+            android:id="@+id/sendSemicolon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text=":"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@id/checkSemicolon"
+            app:layout_constraintTop_toBottomOf="@id/checkSemicolon"
+
+            />
+
+        <EditText
+            android:id="@+id/sendMoney"
+            android:layout_width="130dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/memobox"
+            android:gravity="end"
+            android:inputType="number"
+            android:onTextChanged="@{viewmodel.onTextChanged}"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@id/sendSemicolon"
+            app:layout_constraintTop_toTopOf="@id/sendSemicolon" />
+
+        <TextView
+            android:id="@+id/sendMoneyUSD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="USD"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@id/sendMoney"
+            app:layout_constraintTop_toTopOf="@id/sendSemicolon" />
+
+        <TextView
+            android:id="@+id/totalValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sendSemicolon"
+            android:visibility="@{viewmodel.totalValueVisible ? View.VISIBLE : View.GONE}"
+            android:text="수취 금액은 xKRW 입니다." />
+
+
+        <TextView
+            android:id="@+id/errorValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="송금액이 바르지 않습니다."
+            android:textColor="@color/red"
+            android:textSize="20dp"
+            tools:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="@{viewmodel.totalValueVisible ? View.GONE : View.VISIBLE}"
+            app:layout_constraintTop_toBottomOf="@id/sendSemicolon" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

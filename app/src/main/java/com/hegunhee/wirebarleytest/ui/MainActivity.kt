@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import com.hegunhee.wirebarleytest.R
 import com.hegunhee.wirebarleytest.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,9 +18,9 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
         binding.apply {
             viewmodel = viewModel
+            lifecycleOwner = this@MainActivity
         }
         viewModel.initData()
-
 
     }
 
