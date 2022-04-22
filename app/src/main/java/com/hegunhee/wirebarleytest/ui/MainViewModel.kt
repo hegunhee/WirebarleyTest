@@ -14,8 +14,6 @@ import java.time.format.DateTimeFormatter
 
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
-    var country: Country = Country.Korea
-
     private var _countryText = MutableLiveData<String>("")
     val countryText: LiveData<String>
         get() = _countryText
@@ -24,15 +22,17 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val rateText: LiveData<String>
         get() = _rateText
 
-    private var _time = MutableLiveData<String>("00")
+    private var _time = MutableLiveData<String>("")
     val time: LiveData<String>
         get() = _time
 
-    private var _changedMoney = MutableLiveData<String>("수취 금액은 00원 입니다.")
+    private var _changedMoney = MutableLiveData<String>("")
     val changedMoney: LiveData<String>
         get() = _changedMoney
 
     val switch = MutableLiveData<Switch>(Switch.Uninitalized)
+
+    var country: Country = Country.Korea
 
     var countryKoreaName = "한국"
     var countryEnglishName = "KRW"
@@ -74,20 +74,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun getCurrentTime(): String {
-        val current = LocalDateTime.now().plusHours(9)
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-        return current.format(formatter)
-    }
-
-    private fun isPossibleRange(text: Int): Boolean {
-        return if (text <= 0 || text.toString().isEmpty()) {
-            false
-        } else if (text <= 10000) {
-            true
-        } else {
-            false
-        }
+    private fun setSendingMoney() {
+        _changedMoney.value = "수취 금액은 ${(currentRate * dollers).changeFormat()} $countryEnglishName 입니다."
     }
 
     fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -107,8 +95,16 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    private fun setSendingMoney() {
-        _changedMoney.value = "수취 금액은 ${(currentRate * dollers).changeFormat()} $countryEnglishName 입니다."
+    private fun isPossibleRange(text: Int): Boolean {
+        return if (text <= 0 || text.toString().isEmpty()) {
+            false
+        } else text <= 10000
+    }
+
+    private fun getCurrentTime(): String {
+        val current = LocalDateTime.now().plusHours(9)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        return current.format(formatter)
     }
 
     private fun Double.changeFormat(): String {

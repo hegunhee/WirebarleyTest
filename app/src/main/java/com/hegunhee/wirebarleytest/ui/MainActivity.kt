@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         observingSwitch()
     }
 
-    fun observingSwitch() = viewModel.switch.observe(this) {
+    private fun observingSwitch() = viewModel.switch.observe(this) {
         when (it) {
             is Switch.Uninitalized -> {
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("나라를 선택하세요")
             .setItems(countryArray,
-                DialogInterface.OnClickListener { dialogInterface, which ->
+                DialogInterface.OnClickListener { _, which ->
                     viewModel.country = when (which) {
                         0 -> Country.Korea
                         1 -> Country.Japan
