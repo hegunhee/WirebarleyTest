@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface RateAPI {
     @GET("/live")
-    fun getUSDRate(
+    suspend fun getUSDRate(
         @Query("access_key") key : String,
         @Query("currencies") country : String = "KRW,JPY,PHP",
     ) : Call<USDRate>
