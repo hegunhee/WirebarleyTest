@@ -9,5 +9,4 @@ fun getRateApi(): RateAPI = Retrofit.Builder()
     .build()
     .create(RateAPI::class.java)
 
-
 const val BASE_URL = "http://api.currencylayer.com"

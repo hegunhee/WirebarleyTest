@@ -3,7 +3,6 @@ package com.hegunhee.wirebarleytest.ui
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.hegunhee.wirebarleytest.R
@@ -26,12 +25,12 @@ class MainActivity : AppCompatActivity() {
         observingSwitch()
     }
 
-    private fun observingSwitch() = viewModel.switch.observe(this) {
+    private fun observingSwitch() = viewModel.event.observe(this) {
         when (it) {
-            is Switch.Uninitalized -> {
+            is Event.Uninitalized -> {
 
             }
-            is Switch.Clicked -> {
+            is Event.Clicked -> {
                 setCountry()
             }
 

@@ -1,10 +1,6 @@
 package com.hegunhee.wirebarleytest.ui
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.hegunhee.wirebarleytest.data.Quotes
 import com.hegunhee.wirebarleytest.model.Repository
 import kotlinx.coroutines.launch
@@ -30,7 +26,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val changedMoney: LiveData<String>
         get() = _changedMoney
 
-    val switch = MutableLiveData<Switch>(Switch.Uninitalized)
+    val event = MutableLiveData<Event>(Event.Uninitalized)
+
 
     var country: Country = Country.Korea
 
@@ -52,7 +49,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
 
     fun onClickSendCountry() = viewModelScope.launch {
-        switch.postValue(Switch.Clicked)
+        event.postValue(Event.Clicked)
     }
 
     fun changeData() {
@@ -79,7 +76,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        if (s.length >= 7) {
+        if (s.length >= 6) {
             return
         }
         if (s.isEmpty()) {
